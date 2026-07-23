@@ -80,35 +80,30 @@ Oder einfach: `./start.sh` (installiert beide Seiten und startet den Server).
 ## 🤖 KI‑Übersetzung einrichten (deepseek4free)
 
 Die Übersetzung nutzt den inoffiziellen, kostenlosen DeepSeek‑Client aus dem
-deepseek4free‑Repo. Dafür wird ein **kostenloser DeepSeek‑Web‑Account‑Token**
-benötigt (kein bezahlter API‑Key).
+deepseek4free‑Repo – **das `dsk`‑Paket ist bereits in `backend/vendor/dsk`
+eingebunden**, du musst das Repo also nicht separat klonen. Es wird lediglich
+ein **kostenloser DeepSeek‑Web‑Account‑Token** benötigt (kein bezahlter API‑Key).
 
-1. **Repo bereitstellen** (das `dsk`‑Paket muss importierbar sein):
+1. **Abhängigkeiten installieren** (nur für die KI‑Übersetzung):
    ```bash
-   git clone https://github.com/xtekky/deepseek4free
-   # entweder den Repo‑Ordner zum PYTHONPATH hinzufügen (export PYTHONPATH=.../deepseek4free)
-   # oder den Ordner dsk/ nach backend/vendor/dsk kopieren
+   pip install -r backend/requirements-ai.txt
    ```
-2. **Abhängigkeiten installieren**:
-   ```bash
-   pip install "curl-cffi==0.8.1b9" wasmtime numpy
-   ```
-3. **Token besorgen**:
+2. **Token besorgen**:
    - Auf [chat.deepseek.com](https://chat.deepseek.com) einloggen.
    - DevTools → Console → ausführen:
      ```js
      JSON.parse(localStorage.getItem("userToken")).value
      ```
    - Den Wert kopieren.
-4. **Token setzen** in `backend/.env`:
+3. **Token setzen** in `backend/.env`:
    ```ini
    DEEPSEEK_TOKEN=euer_token_hier
    ```
-5. Backend neu starten. `GET /api/health` sollte dann
+4. Backend neu starten. `GET /api/health` sollte dann
    `{"translation": true, "backend": "dsk"}` liefern.
 
-> **Ohne Token / ohne `dsk`** funktioniert die App trotzdem – es werden dann
-> einfach die Originalnachrichten angezeigt (keine Übersetzung).
+> **Ohne Token** funktioniert die App trotzdem – es werden dann einfach die
+> Originalnachrichten angezeigt (keine Übersetzung).
 
 Um die Übersetzung komplett zu deaktivieren: `USE_DEEPSEEK=0` in der `.env`.
 

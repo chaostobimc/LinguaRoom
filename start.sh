@@ -15,6 +15,10 @@ source .venv/bin/activate
 pip install --upgrade pip >/dev/null
 pip install -r requirements.txt
 
+# Optional: AI translation deps (deepseek4free dsk is bundled in
+# backend/vendor/dsk — only needed when DEEPSEEK_TOKEN is set).
+pip install -r requirements-ai.txt || echo "AI deps skipped (translation will be off until installed + token set)."
+
 echo "== Frontend: install + build =="
 cd ../frontend
 npm install

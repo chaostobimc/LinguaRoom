@@ -84,8 +84,10 @@ class Translator:
             from dsk.api import DeepSeekAPI  # type: ignore
         except Exception as exc:  # pragma: no cover - depends on env
             logger.warning(
-                "deepseek4free `dsk` package not found (%s). "
-                "Translation disabled — chat still works. See README to enable.",
+                "deepseek4free `dsk` is bundled in backend/vendor/dsk but could "
+                "not be imported (%s). Install its deps with "
+                "`pip install -r requirements-ai.txt` and set DEEPSEEK_TOKEN. "
+                "Translation disabled — chat still works.",
                 exc,
             )
             return

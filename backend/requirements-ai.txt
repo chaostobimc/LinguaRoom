@@ -1,0 +1,6 @@
+# AI translation deps for the bundled deepseek4free `dsk` client
+# (backend/vendor/dsk — no need to clone the repo separately).
+# Only required when you set DEEPSEEK_TOKEN to enable live translation.
+curl-cffi==0.8.1b9
+wasmtime
+numpy
