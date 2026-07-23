@@ -1,0 +1,17 @@
+# --- Core (always required) -------------------------------------------
+fastapi>=0.110
+uvicorn[standard]>=0.27
+websockets>=12
+python-multipart>=0.0.9
+
+# --- AI translation (deepseek4free) -----------------------------------
+# The translator uses the `dsk` package from the deepseek4free repo:
+#   git clone https://github.com/xtekky/deepseek4free
+#   export PYTHONPATH=/path/to/deepseek4free   (or copy dsk/ -> backend/vendor/dsk)
+# Then install its runtime deps and set DEEPSEEK_TOKEN (see README):
+#
+#   curl-cffi==0.8.1b9
+#   wasmtime
+#   numpy
+#
+# Without these, the chat still works and simply shows original messages.
