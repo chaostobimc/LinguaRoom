@@ -36,11 +36,27 @@ app.add_middleware(
 # ---------------------------------------------------------------------- #
 @app.get("/api/health")
 async def health():
-    return {
-        "status": "ok",
-        "translation": translation.translator.available,
-        "backend": translation.translator._kind,
-    }
+    return {"status": "ok", **translation_status()}
+
+
+@app.get("/api/translate-test")
+async def translate_test(text: str = "Hello, how are you?", target: str = "German"):
+    """Self-diagnosis: try a real translation with the configured backend."""
+    status = translation_status()
+    if not status["available"]:
+        return {**status, "source": text, "target": target, "result": None}
+    try:
+        result = await translation.translator.translate(text, target)
+        return {
+            **status,
+            "source": text,
+            "target": target,
+            "result": result,
+            "translated": result != text,
+        }
+    except Exception as exc:
+        logger.error("translate-test failed: %s", exc)
+        return {**status, "source": text, "target": target, "result": None, "error": str(exc)}
 
 
 @app.get("/api/languages")
@@ -179,18 +195,31 @@ async def handle_message(room: rooms.Room, conn: rooms.Connection, text: str):
         )
 
 
+def translation_status() -> dict:
+    """Summarise whether AI translation is active and why not if disabled."""
+    t = translation.translator
+    if not config.USE_DEEPSEEK:
+        return {"available": False, "backend": None, "note": "disabled (USE_DEEPSEEK=0)"}
+    if t._client is None:
+        note = (
+            "DEEPSEEK_TOKEN not set"
+            if not config.DEEPSEEK_TOKEN
+            else "dsk not importable — install backend/requirements-ai.txt"
+        )
+        return {"available": False, "backend": None, "note": note}
+    return {"available": True, "backend": t._kind, "note": "ok"}
+
+
 @app.websocket("/ws/{room_id}")
 async def ws_endpoint(websocket: WebSocket, room_id: str):
     await websocket.accept()
-    try:
-        data = await websocket.receive_json()
-    except Exception:
-        await websocket.close()
-        return
-
-    name = (data.get("name") or "Guest").strip()[:40] or "Guest"
-    lang = (data.get("lang") or "en").strip()
-    client_id = data.get("client_id") or uuid.uuid4().hex
+    # Name / language / client id arrive as WebSocket URL query params (the
+    # frontend puts them there). Reading them directly avoids blocking on a
+    # first frame and ensures names/languages are correct from the start.
+    qp = websocket.query_params
+    name = (qp.get("name") or "Guest").strip()[:40] or "Guest"
+    lang = (qp.get("lang") or "en").strip() or "en"
+    client_id = qp.get("client_id") or uuid.uuid4().hex
 
     room = rooms.get_or_create_room(room_id)
     conn = rooms.Connection(websocket, name, lang, client_id)
@@ -203,6 +232,7 @@ async def ws_endpoint(websocket: WebSocket, room_id: str):
             "client_id": client_id,
             "room_id": room_id,
             "you": {"name": name, "lang": lang},
+            "translation": translation_status(),
         },
     )
     await send_presence(room)

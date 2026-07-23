@@ -24,6 +24,7 @@ export function useChat(roomId, name, lang) {
   const [typing, setTyping] = useState({}); // clientId -> name
   const [status, setStatus] = useState('connecting'); // connecting | open | closed
   const [myId, setMyId] = useState(null);
+  const [translation, setTranslation] = useState(null);
 
   const wsRef = useRef(null);
   const clientIdRef = useRef(makeId());
@@ -35,6 +36,7 @@ export function useChat(roomId, name, lang) {
     switch (data.type) {
       case 'welcome':
         setMyId(data.client_id);
+        setTranslation(data.translation ?? null);
         break;
       case 'history': {
         seen.current = new Set(data.messages.map((m) => m.id));
@@ -90,7 +92,23 @@ export function useChat(roomId, name, lang) {
     wsRef.current = ws;
     setStatus('connecting');
 
-    ws.onopen = () => setStatus('open');
+    ws.onopen = () => {
+      setStatus('open');
+      // Send the join handshake (name / language / client id). The backend
+      // also reads these from the URL query params, so this is belt-and-braces.
+      try {
+        ws.send(
+          JSON.stringify({
+            type: 'join',
+            name,
+            lang,
+            client_id: clientIdRef.current,
+          })
+        );
+      } catch {
+        /* noop */
+      }
+    };
     ws.onmessage = (ev) => {
       try {
         handle(JSON.parse(ev.data));
@@ -151,5 +169,5 @@ export function useChat(roomId, name, lang) {
     connect();
   }, [connect]);
 
-  return { messages, members, typing, status, myId, send, sendTyping, reconnectNow };
+  return { messages, members, typing, status, myId, translation, send, sendTyping, reconnectNow };
 }

@@ -40,16 +40,15 @@ def test_room_and_ws():
     room_id = r.json()["room_id"]
     print("[ok] created room", room_id)
 
-    with client.websocket_connect(f"/ws/{room_id}?x=1") as a, \
-         client.websocket_connect(f"/ws/{room_id}?x=2") as b:
-        # Both must send join info first.
-        a.send_json({"name": "Maria", "lang": "de", "client_id": "A"})
-        b.send_json({"name": "Yuki", "lang": "ja", "client_id": "B"})
-
-        # First event for each must be 'welcome'.
+    with client.websocket_connect(f"/ws/{room_id}?name=Maria&lang=de&client_id=A") as a, \
+         client.websocket_connect(f"/ws/{room_id}?name=Yuki&lang=ja&client_id=B") as b:
+        # Name/lang/client_id arrive via URL query params (like the real
+        # frontend). The server sends 'welcome' immediately with the right info.
         aw = a.receive_json()
         bw = b.receive_json()
         assert aw["type"] == "welcome" and bw["type"] == "welcome"
+        assert aw["you"]["name"] == "Maria" and aw["you"]["lang"] == "de"
+        assert bw["you"]["name"] == "Yuki" and bw["you"]["lang"] == "ja"
 
         # Wait until both see each other in presence.
         for ws in (a, b):

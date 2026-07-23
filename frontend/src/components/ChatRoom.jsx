@@ -212,6 +212,17 @@ function ChatRoomInner({ roomId, name, lang, languages, navigate }) {
             <span className="chat__more">+{chat.members.length - 5}</span>
           )}
         </div>
+        {chat.translation && (
+          <span
+            className={'aichip ' + (chat.translation.available ? 'aichip--on' : 'aichip--off')}
+            title={
+              chat.translation.note ||
+              (chat.translation.available ? 'KI-Übersetzung aktiv' : 'KI-Übersetzung inaktiv')
+            }
+          >
+            {chat.translation.available ? 'AI ✓' : ui.translationUnavailable}
+          </span>
+        )}
         <button className="iconbtn" onClick={copyLink} title={ui.copyLink} aria-label={ui.copyLink}>
           {copied ? <CheckIcon /> : <ShareIcon />}
         </button>

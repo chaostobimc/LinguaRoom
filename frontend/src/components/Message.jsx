@@ -29,9 +29,13 @@ export default function Message({ msg, mine, langMeta, ui, showOriginal, onToggl
         {!mine && (
           <div className="msg__head">
             <span className="msg__name">{msg.sender}</span>
-            {langMeta && (
+            {langMeta ? (
               <span className="lang-badge" title={langMeta.en}>
                 {langMeta.flag} {langMeta.native}
+              </span>
+            ) : (
+              <span className="lang-badge" title={msg.senderLang}>
+                {msg.senderLang}
               </span>
             )}
           </div>

@@ -476,6 +476,26 @@ button {
   color: var(--muted);
 }
 
+.aichip {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.aichip--on {
+  color: var(--accent-2);
+  background: var(--accent-soft);
+}
+
+.aichip--off {
+  color: #b3791c;
+  background: #fdf3e0;
+}
+
 .avatar {
   border-radius: 50%;
   display: grid;
