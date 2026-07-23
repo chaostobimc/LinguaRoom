@@ -43,4 +43,14 @@ export const EN = {
   poweredBy: 'Translated by DeepSeek (free)',
   joinCta: 'Enter',
   searchLanguages: 'Search languages…',
+  heroTitle: 'Chat with the whole world.',
+  heroSub:
+    'Create a room, pick your language and share the link. Every message is translated live into each person’s language — names, links and code stay intact.',
+  feat1Title: 'Interface in your language',
+  feat1Desc: 'The whole app is translated automatically.',
+  feat2Title: 'Real-time AI translation',
+  feat2Desc: 'Everyone sees messages in their own language.',
+  feat3Title: '~70 languages',
+  feat3Desc: 'Share a link — friends join in their language.',
+  noAccount: 'No account needed · Open source · Translated with DeepSeek',
 };

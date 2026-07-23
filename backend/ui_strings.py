@@ -53,6 +53,15 @@ EN = {
     "poweredBy": "Translated by DeepSeek (free)",
     "joinCta": "Enter",
     "searchLanguages": "Search languages…",
+    "heroTitle": "Chat with the whole world.",
+    "heroSub": "Create a room, pick your language and share the link. Every message is translated live into each person’s language — names, links and code stay intact.",
+    "feat1Title": "Interface in your language",
+    "feat1Desc": "The whole app is translated automatically.",
+    "feat2Title": "Real-time AI translation",
+    "feat2Desc": "Everyone sees messages in their own language.",
+    "feat3Title": "~70 languages",
+    "feat3Desc": "Share a link — friends join in their language.",
+    "noAccount": "No account needed · Open source · Translated with DeepSeek",
 }
 
 # --- Hand-written built-ins for the most common languages --------------- #
@@ -80,6 +89,15 @@ BUILTIN = {
         "translationUnavailable": "Übersetzung nicht verfügbar",
         "poweredBy": "Übersetzt von DeepSeek (kostenlos)",
         "joinCta": "Betreten", "searchLanguages": "Sprachen suchen…",
+        "heroTitle": "Chatte mit der ganzen Welt.",
+        "heroSub": "Erstelle einen Raum, wähle deine Sprache und teile den Link. Jede Nachricht wird live in die Sprache der anderen übersetzt – Namen, Links und Code bleiben erhalten.",
+        "feat1Title": "Oberfläche in deiner Sprache",
+        "feat1Desc": "Die ganze App wird automatisch übersetzt.",
+        "feat2Title": "KI-Übersetzung in Echtzeit",
+        "feat2Desc": "Jeder sieht die Nachrichten in seiner eigenen Sprache.",
+        "feat3Title": "~70 Sprachen",
+        "feat3Desc": "Teile einen Link – Freunde treten in ihrer Sprache bei.",
+        "noAccount": "Kein Account nötig · Open Source · Übersetzt mit DeepSeek",
     },
     "es": {
         "tagline": "Chatea en cualquier idioma", "yourName": "Tu nombre",
